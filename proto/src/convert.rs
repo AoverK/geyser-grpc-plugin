@@ -404,6 +404,7 @@ impl From<TransactionStatusMeta> for confirmed_block::TransactionStatusMeta {
             .collect();
         let return_data_none = return_data.is_none();
         let return_data = return_data.map(|return_data| return_data.into());
+        let compute_units_consumed = compute_units_consumed.unwrap_or_default();
 
         Self {
             err,
@@ -512,6 +513,12 @@ impl TryFrom<confirmed_block::TransactionStatusMeta> for TransactionStatusMeta {
         } else {
             return_data.map(|return_data| return_data.into())
         };
+        let compute_units_consumed = Some(
+            compute_units_consumed
+                .into_iter()
+                .map(|compute_units_consumed| compute_units_consumed.into())
+                .collect(),
+        );
         Ok(Self {
             status,
             fee,
